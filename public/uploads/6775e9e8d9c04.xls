@@ -1,0 +1,17 @@
+TIPO_OPERACAO,CNPJ_LOTEADORA,NOME_LOTEADORA,CPF_COMPRADOR,NOME_COMPRADOR,ENDERECO_LOTE,NUMERO,COMPLEMENTO,CEP,BAIRRO,MUNICIPIO,UF,VALOR_VENDA,DATA_VENDA
+VENDA,12345678000199,Loteadora Horizonte LTDA,98765432100,Maria Silva Santos,Rua dos Ipês,S/N,Lote 01 Quadra A,74180040,Jardim Primavera,Goiânia,GO,150000.00,2024-03-15
+VENDA,12345678000199,Loteadora Horizonte LTDA,45678912300,João Pedro Oliveira,Rua das Palmeiras,S/N,Lote 05 Quadra B,74180042,Jardim Primavera,Goiânia,GO,180000.00,2024-03-20
+VENDA,12345678000199,Loteadora Horizonte LTDA,78912345600,Ana Carolina Lima,Rua dos Jacarandás,S/N,Lote 08 Quadra C,74180045,Jardim Primavera,Goiânia,GO,200000.00,2024-04-05
+DISTRATO,12345678000199,Loteadora Horizonte LTDA,78912345600,Ana Carolina Lima,Rua dos Jacarandás,S/N,Lote 08 Quadra C,74180045,Jardim Primavera,Goiânia,GO,-200000.00,2024-06-10
+VENDA,12345678000199,Loteadora Horizonte LTDA,32165498700,Carlos Eduardo Santos,Rua das Acácias,S/N,Lote 03 Quadra D,74180048,Jardim Primavera,Goiânia,GO,165000.00,2024-04-15
+VENDA,12345678000199,Loteadora Horizonte LTDA,65432198700,Mariana Costa Pereira,Rua dos Flamboyants,S/N,Lote 12 Quadra E,74180050,Jardim Primavera,Goiânia,GO,175000.00,2024-05-01
+VENDA,12345678000199,Loteadora Horizonte LTDA,12378945600,Pedro Henrique Souza,Rua das Orquídeas,S/N,Lote 07 Quadra F,74180052,Jardim Primavera,Goiânia,GO,190000.00,2024-05-15
+DISTRATO,12345678000199,Loteadora Horizonte LTDA,12378945600,Pedro Henrique Souza,Rua das Orquídeas,S/N,Lote 07 Quadra F,74180052,Jardim Primavera,Goiânia,GO,-190000.00,2024-07-20
+VENDA,12345678000199,Loteadora Horizonte LTDA,98732165400,Fernanda Oliveira Lima,Rua dos Girassóis,S/N,Lote 15 Quadra G,74180055,Jardim Primavera,Goiânia,GO,220000.00,2024-06-01
+VENDA,12345678000199,Loteadora Horizonte LTDA,45612378900,Roberto Carlos Silva,Rua das Violetas,S/N,Lote 09 Quadra H,74180058,Jardim Primavera,Goiânia,GO,195000.00,2024-06-15
+CESSAO_DISTRATO,12345678000199,Loteadora Horizonte LTDA,45612378900,Roberto Carlos Silva,Rua das Violetas,S/N,Lote 09 Quadra H,74180058,Jardim Primavera,Goiânia,GO,-195000.00,2024-08-10
+CESSAO_VENDA,12345678000199,Loteadora Horizonte LTDA,11122233344,Lucas Mendes Ferreira,Rua das Violetas,S/N,Lote 09 Quadra H,74180058,Jardim Primavera,Goiânia,GO,195000.00,2024-08-10
+DACAO,12345678000199,Loteadora Horizonte LTDA,55566677788,Empresa Credora LTDA,Rua das Margaridas,S/N,Lote 20 Quadra I,74180060,Jardim Primavera,Goiânia,GO,250000.00,2024-08-15
+PERMUTA,12345678000199,Loteadora Horizonte LTDA,99988877766,José da Silva,Rua das Hortênsias,S/N,Lote 25 Quadra J,74180062,Jardim Primavera,Goiânia,GO,210000.00,2024-09-01
+PERMUTA,12345678000199,Loteadora Horizonte LTDA,44433322211,Maria das Dores,Rua dos Cravos,S/N,Lote 30 Quadra K,74180064,Jardim Primavera,Goiânia,GO,210000.00,2024-09-01
+VENDA_CONJUGADA,12345678000199,Loteadora Horizonte LTDA,77788899900,Casal Silva e Souza,Rua das Azaleias,S/N,Lote 35 Quadra L,74180066,Jardim Primavera,Goiânia,GO,300000.00,2024-09-15

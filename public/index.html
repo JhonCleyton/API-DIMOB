@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor DIMOB</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #0d6efd;
+            background-color: #f1f3f5;
+        }
+
+        .upload-area.dragover {
+            border-color: #198754;
+            background-color: #e8f5e9;
+        }
+
+        .file-info {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .progress {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        #downloadBtn {
+            display: none;
+        }
+
+        .alert {
+            display: none;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Conversor DIMOB</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="upload-area" id="uploadArea">
+                            <i class="fas fa-cloud-upload-alt fa-3x mb-3 text-primary"></i>
+                            <h5>Arraste e solte seu arquivo aqui</h5>
+                            <p class="text-muted">ou</p>
+                            <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                                Selecione um arquivo
+                            </button>
+                            <input type="file" id="fileInput" accept=".csv,.xls,.xlsx" style="display: none">
+                            <p class="text-muted mt-2">
+                                Formatos suportados: CSV, XLS, XLSX
+                            </p>
+                        </div>
+
+                        <div class="file-info" id="fileInfo">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-file-alt text-primary me-2"></i>
+                                <span id="fileName"></span>
+                                <button class="btn btn-link text-danger ms-auto" onclick="clearFile()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                        </div>
+
+                        <div class="alert alert-success" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span id="successMessage"></span>
+                        </div>
+
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span id="errorMessage"></span>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <button class="btn btn-success" id="convertBtn" disabled>
+                                <i class="fas fa-sync-alt me-2"></i>Converter
+                            </button>
+                            <a href="#" class="btn btn-primary" id="downloadBtn" download>
+                                <i class="fas fa-download me-2"></i>Baixar Arquivo DIMOB
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const convertBtn = document.getElementById('convertBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const progressBar = document.querySelector('.progress');
+        const progressBarInner = document.querySelector('.progress-bar');
+        const successAlert = document.querySelector('.alert-success');
+        const errorAlert = document.querySelector('.alert-danger');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Base URL da API
+        const API_BASE_URL = '/dimob_api';
+
+        // Eventos de drag and drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        uploadArea.addEventListener('drop', handleDrop, false);
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(e) {
+            uploadArea.classList.add('dragover');
+        }
+
+        function unhighlight(e) {
+            uploadArea.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const file = dt.files[0];
+            handleFile(file);
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            handleFile(file);
+        }
+
+        function handleFile(file) {
+            if (!file) return;
+
+            const extension = file.name.split('.').pop().toLowerCase();
+            if (!['csv', 'xls', 'xlsx'].includes(extension)) {
+                showError('Formato de arquivo não suportado. Use CSV, XLS ou XLSX.');
+                return;
+            }
+
+            fileName.textContent = file.name;
+            fileInfo.style.display = 'block';
+            convertBtn.disabled = false;
+            hideAlerts();
+        }
+
+        function clearFile() {
+            fileInput.value = '';
+            fileInfo.style.display = 'none';
+            convertBtn.disabled = true;
+            downloadBtn.style.display = 'none';
+            hideAlerts();
+        }
+
+        function hideAlerts() {
+            successAlert.style.display = 'none';
+            errorAlert.style.display = 'none';
+            progressBar.style.display = 'none';
+            progressBarInner.style.width = '0%';
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorAlert.style.display = 'block';
+            successAlert.style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successAlert.style.display = 'block';
+            errorAlert.style.display = 'none';
+        }
+
+        convertBtn.addEventListener('click', async () => {
+            if (!fileInput.files[0]) return;
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            hideAlerts();
+            progressBar.style.display = 'block';
+            convertBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/convert`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess('Arquivo convertido com sucesso!');
+                    downloadBtn.href = `${API_BASE_URL}/output/${data.file}`;
+                    downloadBtn.style.display = 'inline-block';
+                } else {
+                    showError(data.error || 'Erro ao converter arquivo. Por favor, tente novamente.');
+                }
+            } catch (error) {
+                showError('Erro de conexão. Por favor, verifique sua internet e tente novamente.');
+            } finally {
+                convertBtn.disabled = false;
+                progressBar.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
